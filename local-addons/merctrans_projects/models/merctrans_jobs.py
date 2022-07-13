@@ -62,8 +62,9 @@ class MerctransJobs(models.Model):
                              default="Choose Project",
                              readonly=True,
                              compute='_get_project_valid_date')
-    start_date = fields.Date(string='Start Date')
-    due_date = fields.Date(string='Due Date')
+    start_date = fields.Date(string='Start Date',
+                             default="_get_default_start_date")
+    due_date = fields.Date(string='Due Date', default="_get_default_due_date")
 
     #  TODO: code = auto gen code unique
 
@@ -121,6 +122,18 @@ class MerctransJobs(models.Model):
                 project.valid_date = f"{project.project_id.start_date} >> {project.project_id.due_date}"
             else:
                 project.valid_date = "Choose Project"
+
+    @api.onchange('project_id')
+    @api.depends('project_id')
+    def _get_default_start_date(self):
+        for project in self:
+            return project.project_id.start_date
+
+    @api.onchange('project_id')
+    @api.depends('project_id')
+    def _get_default_due_date(self):
+        for project in self:
+            return project.project_id.due_date
 
     @api.onchange('project_id')
     @api.depends('project_id')
