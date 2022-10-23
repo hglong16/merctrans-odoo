@@ -229,14 +229,6 @@ class MercTransProjects(models.Model):
         for record in records:
             record.sync_status()
 
-    @api.model
-    def test_cron(self):
-        print("test cron")
-
-
-
-
-
     def _get_client_name(self):
         self.client_name = ''
         for record in self:
