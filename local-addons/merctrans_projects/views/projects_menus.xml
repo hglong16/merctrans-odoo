@@ -90,26 +90,33 @@
 <!--                <field name="client_name"/>-->
                 <field name="currency_id" />
                 <!-- <field name="invoice_details_ids" options= "{'no_create': True}" widget="many2many"> -->
-                <field name="invoice_details_ids" widget="many2many" options="{'no_create': True}">
-                  <tree>
-                    <field name="sale_order_name" />
-                    <field name="project_id" />
-                    <field name="client_po_number"/>
-                    <field name="volume" />
-                    <field name="sale_rate" />
-                    <field name="discount" />
-                    <field name="value" />
-                    <field name="currency_id" />
-                    <field name="status" force_save="1"/>
-                  </tree>
-                </field>
+
                 <field name="invoice_value" />
                 <field name="discount"/>
                 <field name="invoice_total"/>
                 <field name="invoice_status" />
                 <field name="invoice_paid_date"/>
+
               </group>
             </group>
+            <notebook>
+                  <page string="Sale Orders">
+                    <field name="invoice_details_ids" widget="many2many" options="{'no_create': True}">
+                      <tree>
+                        <field name="sale_order_name" />
+                        <field name="client"/>
+                        <field name="project_id" />
+                        <field name="client_po_number"/>
+                        <field name="volume" />
+                        <field name="sale_rate" />
+                        <field name="discount" />
+                        <field name="value" />
+                        <field name="currency_id" />
+                        <field name="status" force_save="1"/>
+                      </tree>
+                    </field>
+                  </page>
+                </notebook>
           </sheet>
         </form>
       </field>
@@ -226,7 +233,7 @@
                     <field name="volume"/>
                     <field name="sale_rate"/>
                     <field name="currency_id"/>
-                    <field name="discount"/>
+                    <field name="discount" />
                     <field name="value"/>
                     <field name="status"/>
                   </tree>

@@ -30,11 +30,11 @@ class MerctransClient(models.Model):
                            ('wire transfer', 'Wire Transfer'),
                            ('payoneer', 'Payoneer')]
 
-    name = fields.Char(string='Account Name*')
+    name = fields.Char(string='Account Name*', required=True)
 
     client_short_name = fields.Char(string='Account ID*', readonly=True, compute='_get_client_id')
 
-    email = fields.Char(string='Email')
+    email = fields.Char(string='Email', required=True)
 
     country = fields.Many2one('res.country', string='Country')
 
@@ -97,9 +97,14 @@ class MerctransClient(models.Model):
             if client.name:
                 short_name = "".join(client.name.split()).upper()
             else:
-                short_name = "DEFA"
+                short_name = "On Change"
             client.client_short_name = f"{short_name[:4]}"
 
+    @api.constrains('name')
+    def validate_existing_name_field(self):
+        for rec in self:
+            if not rec.name:
+                raise ValidationError("Name field must not be empty!")
 
 
 

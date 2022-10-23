@@ -38,10 +38,9 @@ class MercTransInvoices(models.Model):
 
 
     invoice_details_ids = fields.Many2many('merctrans.sale',
-                                           string='Invoice Lines',
-                                           domain=[('client', '=', client_name)])
-
-    currency_id = fields.Many2one('res.currency', string='Currency')
+                                           string='Invoice Lines')
+    # Currency computed from sale orders (sale order restrains same currency)
+    currency_id = fields.Many2one('res.currency', string='Currency', required=True)
 
     currency_string = fields.Char(string='Currency String',
                                   compute="_get_currency_string")
@@ -51,14 +50,22 @@ class MercTransInvoices(models.Model):
 
     invoice_status = fields.Selection(string="Invoice Status",
                                       selection=status_list,
-                                      default='unpaid')
+                                      default='invoiced')
 
     discount = fields.Integer(string='Discount (%)', default=0)
 
     invoice_total = fields.Float('Total', compute="_compute_invoice_total", store=True, readonly=True, default=0)
 
-    invoice_paid_date = fields.Date(string='Paid Date', default=datetime.today())
+    invoice_paid_date = fields.Date(string='Paid Date')
 
+    # Functions and Decorators below
+
+    @api.onchange(client_name)
+    def _onchange_client_name(self):
+        for rec in self:
+            search = {'domain': {'invoice_details_ids': [('client', '=', rec.client_name)]}}
+            print(search)
+            return search
 
     @api.onchange('invoice_total')
     @api.depends('invoice_value', 'invoice_total', 'discount')
@@ -82,7 +89,6 @@ class MercTransInvoices(models.Model):
                 inv.client_name += inv.invoice_client.name
             else:
                 inv.client_name = 'default'
-
 
     @api.depends('invoice_client', 'invoice_id')
     @api.onchange('invoice_client', 'invoice_id')
@@ -126,8 +132,8 @@ class MercTransInvoices(models.Model):
         for inv in self:
             if inv.invoice_paid_date and inv.invoice_paid_date < inv.invoice_date:
                 raise ValidationError('Invoice paid date cannot be before invoice due date')
-            if inv.invoice_status != 'paid' and inv.invoice_paid_date:
-                raise ValidationError('Cannot have paid date when status is not Paid')
+            # if inv.invoice_status != 'paid' and inv.invoice_paid_date:
+            #     raise ValidationError('Cannot have paid date when status is not Paid')
 
     @api.constrains('invoice_details_ids')
     def invoice_detail_constrains(self):

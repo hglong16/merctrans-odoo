@@ -24,9 +24,9 @@
             <form create="false" edit="false">
                 <group>
                     <group>
-                        <field name="project_id"/>
                         <field name="sale_order_name" />
-                        <field name="client"/>
+                        <field name="project_id"/>
+                        <field name="client" force_save="1"/>
                         <field name="client_po_number"/>
                         <!-- <field name="source_language" readonly="1"/> -->
                     </group>
@@ -34,6 +34,7 @@
                         <field name="volume"/>
                         <field name="sale_rate"/>
                         <field name="currency_id"/>
+                        <field name="discount" widget="percentage"/>
                         <field name="value"/>
                     </group>
                 </group>
@@ -47,9 +48,9 @@
         <field name="model">merctrans.sale</field>
         <field name="arch" type="xml">
             <tree create="false" edit="false">
-                <field name="project_id"/>
                 <field name="sale_order_name"/>
                 <field name="client"/>
+                <field name="project_id"/>
                 <field name="client_po_number"/>
                 <field name="volume"/>
                 <field name="sale_rate"/>

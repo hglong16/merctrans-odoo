@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data noupdate="1">
+    <data noupdate="0">
        <record id="ir_cron_scheduler_sync_status_action" model="ir.cron">
            <field name="name">Auto Sync Payment Status</field>
            <field name="model_id" ref="model_merctrans_projects"/>
+<!--           <field name="type">ir.actions.server</field>-->
            <field name="state">code</field>
-           <field name="code">model.sync_status()</field>
+           <field name="code">model.auto_sync_status()</field>
            <field name="user_id" ref="base.user_root"/>
            <field name="interval_number">1</field>
            <field name="interval_type">minutes</field>

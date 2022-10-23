@@ -11,12 +11,9 @@ class MercTransServices(models.Model):
     _rec_name = 'services_names'
     _description = 'Services offered by MercTrans'
 
-    department_list = [('localization', 'Localization'),
-                       ('marketing', 'Marketing'),
-                       ('developement', 'Development')]
-    department = fields.Selection(string="Department",
-                                  selection=department_list)
+
     services_names = fields.Char('Services')
+    description = fields.Text('Description')
 
 
 class MercTransTags(models.Model):
@@ -197,12 +194,13 @@ class MercTransProjects(models.Model):
                                  string="Purchase Orders in this Project")
     so_details = fields.One2many("merctrans.sale","project_id", string="Sale Orders in this Project")
     # NOTE: FUNCTION AND API DECORATE
-
+    @api.model
     def get_amount_paid(self):
         for project in self:
-            project.project_paid = sum(sale.value for sale in project.so_details)
+            project.project_paid = sum(sale.value for sale in project.so_details if sale.status == "paid")
+        print("Amount paid function executed!")
             
-
+    @api.model
     def change_status(self):
         for project in self:
             if project.project_paid == 0 and project.project_value:
@@ -213,20 +211,31 @@ class MercTransProjects(models.Model):
                 project.payment_status = 'partly paid'
             elif project.project_paid == project.project_value and project.project_value != 0:
                 project.payment_status = 'paid'
+            print("Change status executed!")
 
+    @api.model
     def sync_status(self):
-        self.get_amount_paid()
-        self.change_status()
-        print("Check Status")
+        for project in self:
+            project.get_amount_paid()
+            project.change_status()
+
+        # self.get_amount_paid()
+        # self.change_status()
+        # print("Sync Status Executed")
+
+    @api.model
+    def auto_sync_status(self):
+        records = self.env['merctrans.projects'].search([])
+        for record in records:
+            record.sync_status()
+
+    @api.model
+    def test_cron(self):
+        print("test cron")
 
 
 
-    # def compute_sale(self):
-    #     for project in self:
-    #         project.project_paid = 0
-    #         for sale_order in self.so_details:
-    #             if sale_order.status == 'paid':
-    #                 project.project_paid += sale_order.value
+
 
     def _get_client_name(self):
         self.client_name = ''
@@ -249,8 +258,9 @@ class MercTransProjects(models.Model):
         vals['number_id'] = self.env['ir.sequence'].next_by_code(
             'merctrans.project') or _('New')
         return super(MercTransProjects, self).create(vals)
+
     @api.model
-    def auto_crete_sale(self, vals):
+    def auto_create_sale(self, vals):
         for project in self:
             if not project.so_details:
                 res = self.env['merctrans.sale'].create(vals)
@@ -322,24 +332,21 @@ class MercTransProjects(models.Model):
     @api.depends('so_details')
     def _compute_paid(self):
         for project in self:
-            project.project_paid = 0
-            for sale_order in self.so_details:
-                if sale_order.status == 'paid':
-                    project.project_paid += sale_order.value
+            project.project_paid = sum(sale.value for sale in project.so_details if sale.status == "paid")
 
-    @api.onchange('project_paid', 'project_value')
-    def change_status(self):
-        for project in self:
-            if project.project_paid == 0 and project.project_value:
-                project.write({'payment_status': 'unpaid'})
-            elif project.project_paid == 0 and project.project_value != 0:
-                project.write({'payment_status': 'unpaid'})
-            elif 0 < project.project_paid < project.project_value:
-                project.write({'payment_status': 'partly paid'})
-            elif project.project_paid == project.project_value and project.project_value != 0:
-                project.write({'payment_status': 'paid'})
-            else:
-                project.write({'payment_status': 'unpaid'})
+    # @api.onchange('project_paid', 'project_value')
+    # def change_status(self):
+    #     for project in self:
+    #         if project.project_paid == 0 and project.project_value:
+    #             project.write({'payment_status': 'unpaid'})
+    #         elif project.project_paid == 0 and project.project_value != 0:
+    #             project.write({'payment_status': 'unpaid'})
+    #         elif 0 < project.project_paid < project.project_value:
+    #             project.write({'payment_status': 'partly paid'})
+    #         elif project.project_paid == project.project_value and project.project_value != 0:
+    #             project.write({'payment_status': 'paid'})
+    #         else:
+    #             project.write({'payment_status': 'unpaid'})
 
 
 

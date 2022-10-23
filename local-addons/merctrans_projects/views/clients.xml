@@ -8,13 +8,13 @@
 
     <!--  contact menu -->
   <record id="account_contacts_actions" model="ir.actions.act_window">
-    <field name="name">Contacts</field>
+    <field name="name">Clients</field>
     <field name="res_model">account.contacts</field>
     <field name="view_mode">tree,form</field>
   </record>
 
   <menuitem name="Account Contacts" id="contact_menu" parent="client_menu" action="account_contacts_actions" sequence="0" />
-  <menuitem name="Accounts" id="account_menu" parent="client_menu" action="merctrans_clients_actions"/>
+  <menuitem name="Clients" id="account_menu" parent="client_menu" action="merctrans_clients_actions"/>
   <!-- client form view -->
   <record id="client_view_form" model="ir.ui.view">
     <field name="name">Account Form View</field>

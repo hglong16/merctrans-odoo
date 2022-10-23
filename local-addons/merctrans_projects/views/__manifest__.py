@@ -33,7 +33,8 @@
         'views/projects_menus.xml',
         'views/templates.xml',
         'views/sale.xml',
-        'views/po.xml'
+        'views/po.xml',
+        'data/automation.xml'
     ],
     # only loaded in demonstration mode
     'demo': [
