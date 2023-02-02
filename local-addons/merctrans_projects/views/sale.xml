@@ -4,6 +4,7 @@
         <field name="name">Merctrans Sale Order List</field>
         <field name="res_model">merctrans.sale</field>
         <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_group_by_project': 1}</field>
     </record>
 
     <menuitem name="Sale Orders" id="sale_order_menu" parent="invoices_menu" action="merctrans_sale_order_actions" sequence="0" />
@@ -66,9 +67,16 @@
         <field name="name">Purchase Order Search</field>
         <field name="model">merctrans.sale</field>
         <field name="arch" type="xml">
-            <searchpanel>
-                <field name="client" string="Client Name"/>
-            </searchpanel>
+            <search>
+                <field name="client" string="Sale Order by Client" filter_domain="['|', ('name', 'ilike', self), ('project_id', 'ilike', self)]"/>
+                <field name="project_id"/>
+                <filter name="client" string="Client" />
+                <group expand="1" string="Group By">
+                    <filter string="Client" name="group_by_client" domain="[]" context="{'group_by':'client'}"/>
+                    <filter string="Project" name="group_by_project" domain="[]" context="{'group_by':'project_id'}"/>
+                </group>
+
+            </search>
         </field>
 
     </record>
