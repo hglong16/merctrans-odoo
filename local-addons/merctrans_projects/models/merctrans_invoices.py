@@ -39,7 +39,7 @@ class MercTransInvoices(models.Model):
     client_name = fields.Char(compute="_get_invoice_client")
 
     invoice_details_ids = fields.Many2many('merctrans.sale',
-                                           string='Invoice Lines')
+                                           string='Sale Orders', domain="[('client', '=', client_name)]")
     # Currency computed from sale orders (sale order restrains same currency)
     currency_id = fields.Char(string='Currency*',
                               required=True,
@@ -66,8 +66,6 @@ class MercTransInvoices(models.Model):
                 if sale.currency_id != rec.currency_id:
                     raise ValidationError("Sale Order Currencies must be the same")
 
-                # if check_rep == False:
-                #     raise ValidationError("Sale Orders' Currencies must be the same")
     @api.onchange('client_name')
     def _onchange_client_name(self):
         for rec in self:

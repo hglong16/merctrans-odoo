@@ -79,7 +79,6 @@
       <field name="arch" type="xml">
         <form>
           <sheet>
-            <group>
               <group>
                 <field name="sender_info" />
                 <field name="invoice_id" />
@@ -87,14 +86,14 @@
                 <field name="invoice_date" />
                 <field name="invoice_due_date" />
                 <field name="invoice_client" />
+                <field name="client_name" invisible="1" />
                 <!--                <field name="client_name"/>-->
                 <field name="currency_id" />
                 <!-- <field name="invoice_details_ids" options= "{'no_create': True}" widget="many2many"> -->
-                <field name="invoice_details_ids" widget="many2many" options="{'no_create': True}">
+                <field name="invoice_details_ids" widget="many2many" style="width:100%" options="{'no_create': True}" >
                   <tree>
                     <field name="sale_order_name" />
                     <field name="project_id" />
-                    <field name="client_po_number" />
                     <field name="volume" />
                     <field name="sale_rate" />
                     <field name="discount" />
@@ -109,7 +108,6 @@
                 <field name="invoice_status" />
                 <field name="invoice_paid_date" />
               </group>
-            </group>
           </sheet>
         </form>
       </field>
