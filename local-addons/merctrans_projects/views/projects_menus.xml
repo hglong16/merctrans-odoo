@@ -198,7 +198,7 @@
                       <group>
                 
                         <field name="purchase_order" />
-                        <field name="contributor" />
+                        <field name="contributor" options="{'no_create': True, 'no_create_edit':True}"/>
                         <field name="target_language" />
                         <field name="source_language" />
                         <field name="service" />
