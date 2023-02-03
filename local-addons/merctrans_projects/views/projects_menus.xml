@@ -85,7 +85,7 @@
                 <field name="invoice_name" />
                 <field name="invoice_date" />
                 <field name="invoice_due_date" />
-                <field name="invoice_client" />
+                <field name="invoice_client" options="{'no_create': True, 'no_create_edit':True, 'no_open':True,}"/>
                 <field name="client_name" invisible="1" />
                 <!--                <field name="client_name"/>-->
                 <field name="currency_id" />
