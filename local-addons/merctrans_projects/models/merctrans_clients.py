@@ -26,7 +26,7 @@ class MerctransClient(models.Model):
                            ('payoneer', 'Payoneer')]
     name = fields.Char(string='Account Name*', required=True)
     client_short_name = fields.Char(string='Account ID*', readonly=True, compute='_get_client_id')
-    email = fields.Char(string='Email', required=True)
+    email = fields.Char(string='Email*', required=True)
     country = fields.Many2one('res.country', string='Country')
     client_note = fields.Html('Account note')
     phone_number = fields.Char(string='Phone number')

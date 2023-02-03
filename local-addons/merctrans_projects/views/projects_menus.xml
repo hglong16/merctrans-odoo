@@ -90,8 +90,8 @@
                 <!--                <field name="client_name"/>-->
                 <field name="currency_id" />
                 <!-- <field name="invoice_details_ids" options= "{'no_create': True}" widget="many2many"> -->
-                <field name="invoice_details_ids" widget="many2many" style="width:100%" options="{'no_create': True}" >
-                  <tree>
+                <field name="invoice_details_ids" style="width:100%" options="{'no_create': True}" >
+                  <tree context="{'search_default_group_by_project': 1}">
                     <field name="sale_order_name" />
                     <field name="project_id" />
                     <field name="volume" />
