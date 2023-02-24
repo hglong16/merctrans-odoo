@@ -185,6 +185,8 @@ class MercTransProjects(models.Model):
         "Project Margin", compute="_compute_margin", store=True, default=0
     )
 
+    margin_status = fields.Integer("Margin Status", compute="_compute_margin_status")
+
     # NOTE: PROJECT STATUS
 
     project_instruction = fields.Html("Project Instruction")
@@ -214,6 +216,7 @@ class MercTransProjects(models.Model):
     so_details = fields.One2many(
         "merctrans.sale", "project_id", string="Sale Orders in this Project"
     )
+
     # NOTE: FUNCTION AND API DECORATE
     @api.model
     def get_amount_paid(self):
@@ -233,8 +236,8 @@ class MercTransProjects(models.Model):
             elif 0 < project.project_paid < project.project_value:
                 project.payment_status = "partly paid"
             elif (
-                project.project_paid == project.project_value
-                and project.project_value != 0
+                    project.project_paid == project.project_value
+                    and project.project_value != 0
             ):
                 project.payment_status = "paid"
             print("Change status executed!")
@@ -293,6 +296,14 @@ class MercTransProjects(models.Model):
 
     # Auto genarate porject_id with client name, datetime and native id
 
+    @api.depends("project_margin")
+    def _compute_margin_status(self):
+        for project in self:
+            if project.project_margin < 0:
+                project.margin_status = 0
+            else:
+                project.margin_status = 1
+
     @api.onchange("client")
     @api.depends("client")
     def _get_project_id(self):
@@ -319,7 +330,7 @@ class MercTransProjects(models.Model):
     def _compute_project_value(self):
         for project in self:
             project.project_value = (
-                (100 - project.discount) / 100 * project.volume * project.sale_rate
+                    (100 - project.discount) / 100 * project.volume * project.sale_rate
             )
 
     @api.constrains("start_date", "due_date")
@@ -339,8 +350,8 @@ class MercTransProjects(models.Model):
         for project in self:
             if project.project_value > 0:
                 project.project_margin = (
-                    project.project_value - project.total_po_value
-                ) / project.project_value
+                                                 project.project_value - project.total_po_value
+                                         ) / project.project_value
 
     # @api.constrains('currency_id', 'so_details')
     # def currency_constrains(self):

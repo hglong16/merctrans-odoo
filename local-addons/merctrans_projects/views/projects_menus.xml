@@ -43,7 +43,7 @@
     <record id="increment_invoices_id" model="ir.sequence">
       <field name="name">ID Incrementation</field>
       <field name="code">increment_invoice_id</field>
-      <field name="prefix"></field>
+      <field name="prefix"/>
       <field name="padding">3</field>
       <field name="company_id" eval="False" />
     </record>
@@ -144,15 +144,13 @@
       <field name="arch" type="xml">
         <form>
           <header>
-            <button name="action_send_email" type="object" string="Send mail 2 PM" class="oe_highlight"></button>
+            <button name="action_send_email" type="object" string="Send mail 2 PM" class="oe_highlight"/>
           </header>
           <sheet>
             <group>
               <group>
-                <field name="project_manager" options="{'no_create': True, 'no_create_edit':True}" />
-                <field name="project_id" />
-                <field name="project_name" />
-                <field name="client" options="{'no_create': True, 'no_create_edit':True}" />
+                <field name="project_manager" options="{'no_create': True, 'no_create_edit':True, 'no_quick_create':True, 'no_open':True}" />
+                <field name="client" options="{'no_create': True, 'no_create_edit':True, 'no_quick_create':True, 'no_open':True}" />
                 <!--                <field name="currency_string"/>-->
                 <field name="source_language" />
                 <field name="target_language" />
@@ -169,7 +167,8 @@
                 <field name="sale_rate" />
                 <field name="project_value" force_save="1" />
                 <field name="total_po_value" force_save="1" />
-                <field name="project_margin" widget="percentage" />
+                <field name="project_margin" widget="percentage" decoration-danger="margin_status == 0"/>
+                <field name="margin_status" invisible="1"/>
                 <field name="project_status" />
                 <field name="client_po_number" />
                 <field name="project_paid" force_save="1" />
@@ -214,7 +213,8 @@
                         <field name="po_status" />
                         <field name="payment_status" />
 
-                                 <button name="action_send_email" type="object" string="Send mail 2 Contributor" class="oe_highlight"></button>
+                        <button name="action_send_email" type="object" string="Send mail 2 Contributor"
+                                class="oe_highlight"/>
                       </group>
                     </group>
                   </form>
@@ -285,7 +285,8 @@
           <field name="project_value" />
 
           <field name="project_paid" />
-          <field name="project_margin" widget="percentage" />
+          <field name="project_margin" widget="percentage" decoration-danger="margin_status == 0"/>
+          <field name="margin_status" invisible="1"/>
           <!--          <field name="total_po_value"/>-->
           <!--          <field name="discount" />-->
           <!--          <field name="start_date" />-->

@@ -12,13 +12,14 @@
         <field name="name">Purchase Order Form</field>
         <field name="model">merctrans.pos</field>
         <field name="arch" type="xml">
-            <header>
-                <button name="action_send_email" type="object" string="Send mail 2 Contributor" class="oe_highlight"></button>
-            </header>
+
+<!--            <header>-->
+<!--                <button name="action_send_email" type="object" string="Send mail 2 Contributor" class="oe_highlight"/>-->
+<!--            </header>-->
             <form create="false" edit="false">
                 <group>
                     <group>
-                        <field name="purchase_order" />
+                        <field name="purchase_order"/>
                         <field name="project_id" />
                         <field name="po_status" />
                         <field name="service" />
@@ -54,7 +55,7 @@
             <tree create="false" edit="false">
                 <field name="purchase_order" />
                 <field name="project_id" />
-                <field name="contributor" />
+                <field name="contributor" options="{'no_create':True}"/>
                 <field name="po_status" />
                 <field name="due_date" />
                 <field name="source_language" readonly='1' />
